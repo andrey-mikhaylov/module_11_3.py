@@ -17,6 +17,7 @@ def test():
     print(introspection_info(getmodule))
     print(introspection_info(print))
     print(introspection_info(pprint))
+    print(introspection_info(test))
     """
     Вывод на консоль:
     {'type': 'int', 'attributes': [...], 'methods': ['__abs__', '__add__', ...], 'module': '__main__'}
