@@ -1,10 +1,34 @@
+import inspect
+from pprint import pprint
+
+
 def introspection_info(obj):
-    pass
+    result = {'type': type(obj).__name__}
+    fields = []
+    methods = []
+    for attr in dir(obj):
+        if callable(getattr(obj, attr)):
+            methods.append(attr)
+        else:
+            fields.append(attr)
+    result['attributes'] = fields
+    result['methods'] = methods
+    module = inspect.getmodule(obj)
+    result['module'] = module.__name__ if module else '__main__'
+    return result
 
 
 def test():
-    number_info = introspection_info(42)
-    print(number_info)
+    print(introspection_info(42))
+    print(introspection_info(introspection_info))
+    print(introspection_info(inspect))
+    print(introspection_info(inspect.getmodule))
+    print(introspection_info(print))
+    print(introspection_info(pprint))
+    """
+    Вывод на консоль:
+    {'type': 'int', 'attributes': [...], 'methods': ['__abs__', '__add__', ...], 'module': '__main__'}
+    """
 
 
 if __name__ == '__main__':
