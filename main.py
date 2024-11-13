@@ -1,28 +1,20 @@
-import inspect
+from inspect import getmodule
 from pprint import pprint
 
 
 def introspection_info(obj):
-    result = {'type': type(obj).__name__}
-    fields = []
-    methods = []
-    for attr in dir(obj):
-        if callable(getattr(obj, attr)):
-            methods.append(attr)
-        else:
-            fields.append(attr)
-    result['attributes'] = fields
-    result['methods'] = methods
-    module = inspect.getmodule(obj)
-    result['module'] = module.__name__ if module else '__main__'
-    return result
+    return {
+        'type': type(obj).__name__,
+        'attributes': [attr for attr in dir(obj) if not callable(getattr(obj, attr))],
+        'methods': [attr for attr in dir(obj) if callable(getattr(obj, attr))],
+        'module': getmodule(obj).__name__ if getmodule(obj) else '__main__'
+    }
 
 
 def test():
     print(introspection_info(42))
     print(introspection_info(introspection_info))
-    print(introspection_info(inspect))
-    print(introspection_info(inspect.getmodule))
+    print(introspection_info(getmodule))
     print(introspection_info(print))
     print(introspection_info(pprint))
     """
